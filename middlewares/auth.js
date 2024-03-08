@@ -16,8 +16,11 @@ async function restrictToLoggedinUserOnly(req, res, next)
         return res.redirect("/login");
     }
 
-    req.user = user;
-    res.user = user;
+    console.log(user)
+    console.log(user.id);
+
+    req.user = user.id;
+    // res.user = user;
     next();
 
 };
@@ -69,7 +72,7 @@ const checkLogin = (req, res, next) => {
       });
     } 
     else {
-      res.locals.user = null;
+      res.locals.user = false;
       next();
     }
   };

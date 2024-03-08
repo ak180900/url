@@ -4,6 +4,8 @@ const URL = require('../models/url');
 const { restrictToLoggedinUserOnly } = require('../middlewares/auth');
 const { handleUserSignUp, handleUserLogin } = require('../controller/user');
 
+const jwt = require('jsonwebtoken');
+
 
 router.get('/start', restrictToLoggedinUserOnly, async (req, res) => {
     // if (!req.user) return res.redirect("/login");
@@ -28,7 +30,10 @@ router.get('/logout', async (req, res) => {
 
 router.get('/myUrls', restrictToLoggedinUserOnly, async (req, res) => {
 
-    const allURL = await URL.find({ createdBy: req.user._id });
+    const user = jwt.verify(req.cookies?.jwt, 'mysecret');
+    console.log(user.email);
+
+    const allURL = await URL.find({ createdBy: user.id });
     return res.render("show", {
         urls: allURL
     });

@@ -1,30 +1,46 @@
-const express = require('express'); 
 const { nanoid } = require('nanoid');
 const URL = require('../models/url.js');
-// const app = express();
-// const bodyParser = require("body-parser");
-// app.use(bodyParser.urlencoded({extended: true}));
+const jwt = require('jsonwebtoken');
 
-// console.log(nanoid(8));
 async function handleGenerateNewShortURL(req, res) {
-    const body = req.body.longURL;
+  try {
+    const { longURL } = req.body;
 
-    // if(!body.longURL)
-    // {
-    //     return res.status(400).json({ error: "url is required" });
-    // }
+    // Validate if longURL is provided
+    if (!longURL) {
+      return res.status(400).json({ error: "URL is required" });
+    }
+
     const short = nanoid(4);
 
-    await URL.create( {
-        shortendURL: short, 
-        redirectURL: req.body.longURL,
-        visited: [],
-        createdBy: req.user._id,
+    // Verify the JWT token and get user information
+    // const user = jwt.verify(req.cookies?.jwt, 'mysecret');
+    const email = req.user;
+
+    // Check if user information is available
+    // if (!user || !user.email) {
+    //   return res.status(401).json({ error: "Unauthorized" });
+    // }
+
+    console.log(email);
+
+
+
+    // Create a new URL entry in MongoDB
+    await URL.create({
+      shortendURL: short,
+      redirectURL: longURL,
+      visited: [],
+      createdBy: email,
     });
 
     return res.redirect('/myUrls');
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 module.exports = {
-    handleGenerateNewShortURL,
-}
+  handleGenerateNewShortURL,
+};

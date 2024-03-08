@@ -35,9 +35,11 @@ async function handleUserLogin(req, res)
         return res.redirect('/login');
     }    
 
-    const token = jwt.sign({user}, "mysecret");
+    const token = jwt.sign({id: email, pass: password }, "mysecret");
     res.cookie('jwt', token);
     return res.redirect("/start");
+
+
 }
 
 
