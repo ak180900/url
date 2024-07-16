@@ -5,8 +5,10 @@
     </h1>    
     <br><br>
 
+    <%  %>
+
     <% if (locals.urls) { %>
-        <table>
+        <table class="table">
             <thead>
                 <th>Index</th>
                 <th>Main URL</th>
@@ -14,7 +16,7 @@
                 <th>Visited</th>  
 
             </thead>
-
+            
             <tbody>
                 <% urls.forEach((url, index) => { %>
                     <tr>
@@ -30,6 +32,9 @@
                     
         </table>    
     <% } %>
+
+
+    
     
     
 <%- include('./partials/footer'); -%>

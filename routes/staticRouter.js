@@ -33,9 +33,15 @@ router.get('/myUrls', restrictToLoggedinUserOnly, async (req, res) => {
     const user = jwt.verify(req.cookies?.jwt, 'mysecret');
     console.log(user.email);
 
+    // console.log(req.hostname);
+    // console.log(req.pathname);
+    const hostName = req.hostname;
+    console.log(hostName);
+
     const allURL = await URL.find({ createdBy: user.id });
+    
     return res.render("show", {
-        urls: allURL
+        urls: allURL,
     });
 
 });
